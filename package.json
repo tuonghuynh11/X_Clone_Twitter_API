@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development & npx nodemon",
+    "dev": "NODE_ENV=development npx nodemon",
     "dev:stag": "SET NODE_ENV=staging & npx nodemon",
     "dev:prod": "SET NODE_ENV=production & npx nodemon",
     "build": "rimraf ./dist && tsc && tsc-alias",
-    "start:dev": "NODE_ENV=development & node dist/index.js",
+    "start:dev": "NODE_ENV=development node dist/index.js",
     "start:stag": "SET NODE_ENV=staging & node dist/index.js",
     "start:prod": "SET NODE_ENV=production & node dist/index.js",
     "lint": "eslint .",
