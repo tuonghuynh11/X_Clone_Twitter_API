@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "SET NODE_ENV=development & npx nodemon",
+    "dev": "NODE_ENV=development npx nodemon",
     "dev:stag": "SET NODE_ENV=staging & npx nodemon",
     "dev:prod": "SET NODE_ENV=production & npx nodemon",
     "build": "rimraf ./dist && tsc && tsc-alias",
@@ -60,7 +60,7 @@
     "minimist": "^1.2.8",
     "mongodb": "^6.3.0",
     "nanoid": "^5.0.4",
-    "sharp": "^0.33.2",
+    "sharp": "^0.32.1",
     "slash": "^5.1.0",
     "socket.io": "^4.7.4",
     "swagger-jsdoc": "^6.2.8",
