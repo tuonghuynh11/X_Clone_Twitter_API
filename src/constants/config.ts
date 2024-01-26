@@ -1,11 +1,7 @@
-// import argv from 'minimist'
 // import { config } from 'dotenv'
 // import fs from 'fs'
 // import path from 'path'
-
-// console.log('ENV:', process.env)
-// const options = argv(process.argv.slice(2))
-// const env = options.env
+// const env = process.env.NODE_ENV?.trim()
 // const envFilename = `.env.${env}`
 // if (!env) {
 //   console.log(`Bạn chưa cung cấp biến môi trường NODE_ENV (ví dụ: development, production)`)
@@ -19,34 +15,16 @@
 //   console.log(`Vui lòng tạo file ${envFilename} và tham khảo nội dung ở file .env.example`)
 //   process.exit(1)
 // }
-
-// export const isProduction = options.env === 'production'
 // config({
-//   path: options?.env ? `.env.${options.env}` : '.env'
+//   path: envFilename
 // })
-
+// export const isProduction = env === 'production'
 import { config } from 'dotenv'
-import fs from 'fs'
-import path from 'path'
-const env = process.env.NODE_ENV?.trim()
-const envFilename = `.env.${env}`
-if (!env) {
-  console.log(`Bạn chưa cung cấp biến môi trường NODE_ENV (ví dụ: development, production)`)
-  console.log(`Phát hiện NODE_ENV = ${env}`)
-  process.exit(1)
-}
-console.log(`Phát hiện NODE_ENV = ${env}, vì thế app sẽ dùng file môi trường là ${envFilename}`)
-if (!fs.existsSync(path.resolve(envFilename))) {
-  console.log(`Không tìm thấy file môi trường ${envFilename}`)
-  console.log(`Lưu ý: App không dùng file .env, ví dụ môi trường là development thì app sẽ dùng file .env.development`)
-  console.log(`Vui lòng tạo file ${envFilename} và tham khảo nội dung ở file .env.example`)
-  process.exit(1)
-}
-config({
-  path: envFilename
-})
+const env = process.env.NODE_ENV
 export const isProduction = env === 'production'
-
+config({
+  path: env ? `.env.${env}` : '.env'
+})
 export const envConfig = {
   port: (process.env.PORT as string) || 4000,
   host: process.env.HOST as string,
