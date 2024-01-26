@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 'Create env file'
-        run: echo "${{ secrets.TWITTER.ENV.DEVELOPMENT }}" >> .env.development
+        run: echo "${{ secrets.TWITTER_ENV_DEVELOPMENT }}" >> .env.development
       - name: Build the Docker image
         run: |
           # IMAGE_TAG=hmt1/twitter:v$(date +%s)
