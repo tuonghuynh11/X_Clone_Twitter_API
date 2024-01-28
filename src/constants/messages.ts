@@ -64,7 +64,9 @@ export const USERS_MESSAGES = {
   CHANGE_PASSWORDS_SUCCESS: 'Change passwords successful',
   GMAIL_NOT_VERIFIED: 'Email not verified',
   UPLOAD_SUCCESS: 'Upload successful',
-  GET_VIDEO_STATUS_SUCCESS: 'Get video status successful'
+  GET_VIDEO_STATUS_SUCCESS: 'Get video status successful',
+  GET_RANDOM_USERS_SUCCESS: 'Get random user successful',
+  GET_FOLLOWER_SUCCESS: 'Get followers successful'
 } as const
 
 export const TWEETS_MESSAGES = {
@@ -93,7 +95,8 @@ export const BOOKMARKS_MESSAGES = {
   TWEET_ID_NOT_EMPTY: 'The tweet ID must be not empty',
   INVALID_TWEET_ID: 'The tweet ID is invalid',
   TWEET_NOT_FOUND: 'The tweet is not found',
-  UNBOOKMARKS_SUCCESSFULLY: 'Unbookmark successfully'
+  UNBOOKMARKS_SUCCESSFULLY: 'Unbookmark successfully',
+  GET_BOOKMARKS_SUCCESSFULLY: 'Get books successfully'
 } as const
 export const LIKES_MESSAGES = {
   LIKES_SUCCESSFULLY: 'LIKE Tweet successfully',
@@ -101,7 +104,8 @@ export const LIKES_MESSAGES = {
   TWEET_ID_NOT_EMPTY: 'The tweet ID must be not empty',
   INVALID_TWEET_ID: 'The tweet ID is invalid',
   TWEET_NOT_FOUND: 'The tweet is not found',
-  UNLIKE_SUCCESSFULLY: 'Unlike successfully'
+  UNLIKE_SUCCESSFULLY: 'Unlike successfully',
+  GET_TWEETS_LIKED_SUCCESSFULLY: 'Get tweets liked successfully'
 } as const
 export const SEARCH_MESSAGES = {
   SEARCH_SUCCESSFULLY: 'Search successfully',
@@ -111,4 +115,17 @@ export const SEARCH_MESSAGES = {
 } as const
 export const CONVERSATIONS_MESSAGES = {
   GET_CONVERSATIONS_SUCCESSFULLY: 'Get conversions successfully'
+} as const
+
+export const NOTIFICATION_MESSAGES = {
+  LIKE: (interacted_user_name: string, tweet_content: string) =>
+    `${interacted_user_name} liked your tweet: ${tweet_content}`,
+  BOOKMARK: (interacted_user_name: string, tweet_content: string) =>
+    `${interacted_user_name} bookmarked your tweet: ${tweet_content}`,
+  COMMENT: (interacted_user_name: string, tweet_content: string) =>
+    `${interacted_user_name} commented your tweet: ${tweet_content}`,
+  RETWEET: (interacted_user_name: string, tweet_content: string) =>
+    `${interacted_user_name} retweeted your tweet: ${tweet_content}`,
+  QUOTETWEET: (interacted_user_name: string, tweet_content: string) =>
+    `${interacted_user_name} quoted your tweet: ${tweet_content}`
 } as const

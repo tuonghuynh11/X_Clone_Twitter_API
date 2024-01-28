@@ -9,6 +9,7 @@ import Bookmark from '~/models/schemas/Bookmarks.schema'
 import Like from '~/models/schemas/Likes.schema'
 import Conversation from '~/models/schemas/Conversations.schema'
 import { envConfig } from '~/constants/config'
+import Notification from '~/models/schemas/Notifications.schema'
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@twitter.edfvckz.mongodb.net/?retryWrites=true&w=majority`
 
 class DatabaseService {
@@ -134,6 +135,9 @@ class DatabaseService {
   }
   get conversations(): Collection<Conversation> {
     return this.db.collection(envConfig.dbConversationCollection as string)
+  }
+  get notifications(): Collection<Notification> {
+    return this.db.collection(envConfig.dbNotificationCollection as string)
   }
 }
 

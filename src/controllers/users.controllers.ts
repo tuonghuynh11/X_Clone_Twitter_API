@@ -25,6 +25,7 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { UserVerifyStatus } from '~/constants/enums'
 import { omit, pick } from 'lodash'
 import { envConfig } from '~/constants/config'
+import { Pagination } from '~/models/requests/Tweet.requests'
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const user = req.user as User
   const user_id = user._id as ObjectId
@@ -186,6 +187,7 @@ export const getProfileController = async (req: Request<GetProfileReqParams>, re
     result: user
   })
 }
+
 export const followController = async (
   req: Request<ParamsDictionary, any, FollowReqBody>,
   res: Response,
@@ -202,6 +204,26 @@ export const unFollowController = async (req: Request<UnFollowReqParams>, res: R
   const result = await usersService.unFollow(user_id, followed_user_id)
   return res.json(result)
 }
+export const getFollowerController = async (
+  req: Request<ParamsDictionary, any, any, Pagination>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const { followers, total } = await usersService.getFollower({ user_id, limit, page })
+  return res.json({
+    message: USERS_MESSAGES.GET_FOLLOWER_SUCCESS,
+    result: {
+      followers: followers,
+      page: page,
+      limit: limit,
+      total_items: total,
+      total_pages: Math.ceil(total / limit)
+    }
+  })
+}
 
 export const changePasswordController = async (
   req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
@@ -212,4 +234,12 @@ export const changePasswordController = async (
   const { new_password } = req.body
   const result = await usersService.changePassword(user_id, new_password)
   return res.json(result)
+}
+export const getRandomUserController = async (req: Request, res: Response, next: NextFunction) => {
+  const users = await usersService.getRandomUser()
+  return res.json({
+    message: USERS_MESSAGES.GET_RANDOM_USERS_SUCCESS,
+    total_users: 10,
+    result: users
+  })
 }

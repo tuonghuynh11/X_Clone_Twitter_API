@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development npx nodemon",
+    "dev": "SET NODE_ENV=development & npx nodemon",
     "dev:stag": "NODE_ENV=staging npx nodemon",
     "dev:prod": "NODE_ENV=production npx nodemon",
     "build": "rimraf ./dist && tsc && tsc-alias",

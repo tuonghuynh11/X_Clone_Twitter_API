@@ -468,6 +468,197 @@ class UsersService {
       message: USERS_MESSAGES.CHANGE_PASSWORDS_SUCCESS
     }
   }
+
+  async getRandomUser() {
+    const users_random = await databaseService.users
+      .aggregate([
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'followed_user_id',
+            as: 'followers'
+          }
+        },
+        {
+          $addFields: {
+            followers: {
+              $size: '$followers'
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            username: 1,
+            bio: 1,
+            followers: 1,
+            avatar: 1,
+            cover_photo: 1
+          }
+        },
+        {
+          $sort: {
+            followers: -1
+          }
+        },
+        {
+          $limit: 10
+        }
+      ])
+      .toArray()
+
+    return users_random
+  }
+  async getFollower({ user_id, page, limit }: { user_id: string; page: number; limit: number }) {
+    const user_id_obj = new ObjectId(user_id)
+
+    const [followers, total] = await Promise.all([
+      databaseService.users
+        .aggregate([
+          {
+            $match: {
+              _id: user_id_obj
+            }
+          },
+          {
+            $lookup: {
+              from: 'followers',
+              localField: '_id',
+              foreignField: 'followed_user_id',
+              as: 'followers'
+            }
+          },
+          {
+            $unwind: {
+              path: '$followers'
+            }
+          },
+          {
+            $replaceRoot: {
+              newRoot: '$followers'
+            }
+          },
+          {
+            $limit: limit
+          },
+          {
+            $skip: limit * (page - 1)
+          }
+        ])
+        .toArray(),
+      databaseService.users
+        .aggregate([
+          {
+            $match: {
+              _id: user_id_obj
+            }
+          },
+          {
+            $lookup: {
+              from: 'followers',
+              localField: '_id',
+              foreignField: 'followed_user_id',
+              as: 'followers'
+            }
+          },
+          {
+            $addFields:
+              /**
+               * newField: The new field name.
+               * expression: The new field expression.
+               */
+              {
+                total_followers: {
+                  $size: '$followers'
+                }
+              }
+          }
+        ])
+        .toArray()
+    ])
+    return {
+      followers: followers,
+      total: total[0].total_followers
+    }
+  }
+  async getUnFollower(user_id: string, limit: number = 10) {
+    const user_id_obj = new ObjectId(user_id)
+    const user = await databaseService.users
+      .aggregate([
+        {
+          $match: {
+            _id: user_id_obj
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'followed_user_id',
+            as: 'followers'
+          }
+        },
+        {
+          $addFields: {
+            follower_ids: {
+              $map: {
+                input: '$followers',
+                as: 'follower',
+                in: {
+                  _id: '$$follower.user_id'
+                }
+              }
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            let: {
+              user_id: '$_id',
+              follower_ids: '$follower_ids'
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {
+                        $not: {
+                          $in: ['$_id', '$$follower_ids']
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                $project: {
+                  _id: 1
+                }
+              }
+            ],
+            as: 'not_following'
+          }
+        },
+        {
+          $project: {
+            not_following: 1,
+            _id: 0
+          }
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+
+    return {
+      unFollow: (user[0] as any)?.not_following
+    }
+  }
 }
 
 const usersService = new UsersService()

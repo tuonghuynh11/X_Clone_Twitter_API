@@ -1,14 +1,30 @@
 import { Router } from 'express'
 import {
   bookmarkTweetController,
+  getBookmarkController,
   unBookmarkTweetByBookmarkIdController,
   unBookmarkTweetController
 } from '~/controllers/bookmarks.controller'
-import { tweetIdValidator } from '~/middlewares/tweets.middlewares'
+import { paginationNavigator, tweetIdValidator } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, verifiedUSerValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handles'
 
 const bookmarksRouter = Router()
+
+/**
+ * Description: Get My Bookmark
+ * Path: /
+ * Method: GET
+ * Header:{Authorization:Bearer <access_token>}
+ * Body:
+ * **/
+bookmarksRouter.get(
+  '',
+  accessTokenValidator,
+  verifiedUSerValidator,
+  paginationNavigator,
+  wrapRequestHandler(getBookmarkController)
+)
 
 /**
  * Description: Create Bookmark

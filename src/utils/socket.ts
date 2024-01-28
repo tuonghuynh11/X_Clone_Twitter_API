@@ -84,7 +84,6 @@ export const initSocket = (httpServer: HTTP_SERVER.Server) => {
         })
       }
     })
-
     socket.on('disconnect', () => {
       users.delete(user_id)
       // delete users[user_id]

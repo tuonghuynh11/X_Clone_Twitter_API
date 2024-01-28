@@ -5,10 +5,10 @@ components:
       properties:
         email:
           type: string
-          example: admin1@gmail.com
+          example: hmt1@gmail.com
         password:
           type: string
-          example: Duoc123!
+          example: '@Aa1234567'
     SuccessAuthentication:
       type: object
       properties:
@@ -298,3 +298,66 @@ components:
           type: string
           format: date-time
           description: Thời gian cập nhật tweet
+    LikeRequestBody:
+      type: object
+      properties:
+        tweet_id:
+          type: string
+          format: MongoId
+          description: Tweet ID
+          example: 64be0ad2e43d2464394feedb
+    BookmarkRequestBody:
+      type: object
+      properties:
+        tweet_id:
+          type: string
+          format: MongoId
+          description: Tweet ID
+          example: 64be0ad2e43d2464394feedb
+    UnTweetResponseBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        tweet_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        user_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        created_at:
+          type: string
+          example: 2021-09-30T15:00:00.000Z
+    Conversation:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        sender_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        receiver_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        content:
+          type: string
+          example: 'Hello world!'
+        created_at:
+          type: string
+          example: 2021-09-30T15:00:00.000Z
+        updated_at:
+          type: string
+          example: 2021-09-30T15:00:00.000Z
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

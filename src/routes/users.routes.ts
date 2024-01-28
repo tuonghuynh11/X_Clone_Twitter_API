@@ -3,8 +3,10 @@ import {
   changePasswordController,
   followController,
   forgotPasswordController,
+  getFollowerController,
   getMeController,
   getProfileController,
+  getRandomUserController,
   loginController,
   logoutController,
   oauthController,
@@ -18,6 +20,7 @@ import {
   verifyForgotPasswordTokenController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
+import { paginationNavigator } from '~/middlewares/tweets.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidator,
@@ -190,14 +193,29 @@ usersRouter.patch(
   ]),
   wrapRequestHandler(updateMeController)
 )
+/**
+ * Description: Get For you Random User By Highest Followers
+ * Path: /random
+ * Method: GET
+ * Header:
+ * Body:
+ * **/
+usersRouter.get('/random', wrapRequestHandler(getRandomUserController))
 
 /**
- * Description: Get User Profile
- * Path: /:username
+ * Description: Get Followers
+ * Path: /followers
  * Method: GET
+ * Header:{Authorization:Bearer <access_token>}
+ * Body:
  * **/
-usersRouter.get('/:username', wrapRequestHandler(getProfileController))
-
+usersRouter.get(
+  '/followers',
+  accessTokenValidator,
+  verifiedUSerValidator,
+  paginationNavigator,
+  wrapRequestHandler(getFollowerController)
+)
 /**
  * Description: Follow Someone
  * Path: /follow
@@ -205,6 +223,7 @@ usersRouter.get('/:username', wrapRequestHandler(getProfileController))
  * Header:{Authorization:Bearer <access_token>}
  * Body:{follower_user_id:string}
  * **/
+
 usersRouter.post(
   '/follow',
   accessTokenValidator,
@@ -242,4 +261,10 @@ usersRouter.put(
   changePasswordValidator,
   wrapRequestHandler(changePasswordController)
 )
+/**
+ * Description: Get User Profile
+ * Path: /:username
+ * Method: GET
+ * **/
+usersRouter.get('/:username', wrapRequestHandler(getProfileController))
 export default usersRouter

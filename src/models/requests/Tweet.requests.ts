@@ -33,3 +33,6 @@ export interface NewFeed extends Tweet {
   comment_count: number
   quote_count: number
 }
+export interface NewFeedQuery extends Pagination, Query {
+  isForYou: string
+}

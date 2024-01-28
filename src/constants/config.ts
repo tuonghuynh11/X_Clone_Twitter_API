@@ -47,6 +47,7 @@ export const envConfig = {
   dbFollowersCollection: process.env.DB_FOLLOWERS_COLLECTION as string,
   dbVideoStatusCollection: process.env.DB_VIDEO_STATUS_COLLECTION as string,
   dbConversationCollection: process.env.DB_CONVERSATIONS_COLLECTION as string,
+  dbNotificationCollection: process.env.DB_NOTIFICATIONS_COLLECTION as string,
   passwordSecret: process.env.PASSWORD_SECRET as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
   jwtSecretRefreshToken: process.env.JWT_SECRET_REFRESH_TOKEN as string,

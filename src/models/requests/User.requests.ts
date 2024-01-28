@@ -1,7 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken'
 import { TokenType, UserVerifyStatus } from '~/constants/enums'
-import { ParamsDictionary } from 'express-serve-static-core'
-
+import { ParamsDictionary, Query } from 'express-serve-static-core'
+import { Pagination } from './Tweet.requests'
 /**
  * @swagger
  * components:
@@ -147,3 +147,5 @@ export interface ChangePasswordReqBody {
   new_password: string
   confirm_password: string
 }
+
+export interface FollowerQuery extends Pagination, Query {}

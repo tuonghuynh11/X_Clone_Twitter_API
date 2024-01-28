@@ -4,6 +4,7 @@ import Tweet from '~/models/schemas/Tweet.schema'
 import { ObjectId, WithId } from 'mongodb'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import { TweetType } from '~/constants/enums'
+import usersService from './users.services'
 
 class TweetsService {
   async checkAndCreateHashtags(hashtags: string[]) {
@@ -235,7 +236,17 @@ class TweetsService {
     })
     return { tweets, total }
   }
-  async getNewFeeds({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+  async getNewFeeds({
+    user_id,
+    limit,
+    page,
+    isForYou
+  }: {
+    user_id: string
+    limit: number
+    page: number
+    isForYou?: boolean
+  }) {
     const user_id_obj = new ObjectId(user_id)
     const followed_user_ids = await databaseService.followers
       .find(
@@ -250,7 +261,14 @@ class TweetsService {
         }
       )
       .toArray()
-    const ids = followed_user_ids.map((followed_user_id) => followed_user_id.followed_user_id)
+
+    let ids = followed_user_ids.map((followed_user_id) => followed_user_id.followed_user_id)
+    if (isForYou) {
+      const { unFollow } = await usersService.getUnFollower(user_id)
+
+      const not_following = unFollow.map((unFollow_userID: any) => unFollow_userID._id)
+      ids = [...not_following, ids]
+    }
     //Mong muốn newfeed sẽ lấy luôn feed của mình
     ids.push(new ObjectId(user_id))
 
@@ -424,6 +442,7 @@ class TweetsService {
           }
         ])
         .toArray(),
+
       databaseService.tweets
         .aggregate([
           {

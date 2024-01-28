@@ -669,3 +669,432 @@ paths:
                     example: Upload video thành công
                   result:
                     $ref: '#/components/schemas/Media'
+  /search:
+    get:
+      tags:
+        - search
+      summary: List Of Tweets
+      description: Search Tweets by content, media type
+      operationId: searchtweets
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: content
+          in: query
+          description: Content Of Tweet
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng tweet trên 1 trang
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - name: media_type
+          in: query
+          description: Type Of Tweet
+          required: false
+          schema:
+            type: string
+            example: image
+            enum:
+              - image
+              - video
+        - name: people_follow
+          in: query
+          description: Tweet of my followers
+          required: false
+          schema:
+            type: boolean
+            example: true
+      responses:
+        '200':
+          description: search successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: search successful
+                  result:
+                    type: object
+                    properties:
+                      tweets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Tweet'
+                      total_page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+        '400':
+          description: Invalid status value
+  /likes:
+    post:
+      tags:
+        - likes
+      summary: Like tweet
+      description: Like tweet
+      operationId: likeTweet
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Tweet ID
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LikeRequestBody'
+        required: true
+      responses:
+        default:
+          description: Like tweet successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: LIKE Tweet successfully
+                  result:
+                    $ref: '#/components/schemas/UnTweetResponseBody'
+    get:
+      tags:
+        - likes
+      summary: Get Tweets User Liked
+      description: Get Tweets User Liked
+      operationId: tweetUserLiked
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng tweet trên 1 trang
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Get tweets liked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get tweets liked successfully
+                  result:
+                    type: object
+                    properties:
+                      tweets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Tweet'
+                      total_page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+        '400':
+          description: Invalid status value
+  /likes/tweets/{tweet_id}:
+    delete:
+      tags:
+        - likes
+      summary: Unlike tweet by tweet_id
+      description: Unlike tweet by tweet_id
+      operationId: unlikeTweet
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 64be0ad2e43d2464394feedb
+      responses:
+        default:
+          description: Unlike successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unlike successfully
+                  result:
+                    $ref: '#/components/schemas/UnTweetResponseBody'
+  /likes/{like_id}:
+    delete:
+      tags:
+        - likes
+      summary: Unlike tweet by like_id
+      description: Unlike tweet by like_id
+      operationId: unlikeTweet
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: like_id
+          in: path
+          description: Like Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 64be0ad2e43d2464394feedb
+      responses:
+        default:
+          description: Unlike successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unlike successfully
+                  result:
+                    $ref: '#/components/schemas/UnTweetResponseBody'
+
+  /bookmarks:
+    post:
+      tags:
+        - bookmarks
+      summary: Bookmark tweet
+      description: Bookmark tweet
+      operationId: bookmarkTweet
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Tweet ID
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookmarkRequestBody'
+        required: true
+      responses:
+        default:
+          description: Bookmark tweet successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bookmark Tweet successfully
+                  result:
+                    $ref: '#/components/schemas/UnTweetResponseBody'
+    get:
+      tags:
+        - bookmarks
+      summary: Get Tweets User Bookmarked
+      description: Get Tweets User Bookmarked
+      operationId: tweetUserBookmarked
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng tweet trên 1 trang
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Get tweets bookmarked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get tweets bookmarked successfully
+                  result:
+                    type: object
+                    properties:
+                      tweets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Tweet'
+                      total_page:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      page:
+                        type: integer
+                        example: 1
+        '400':
+          description: Invalid status value
+  /bookmarks/tweets/{tweet_id}:
+    delete:
+      tags:
+        - bookmarks
+      summary: Unbookmark tweet by tweet_id
+      description: Unbookmark tweet by tweet_id
+      operationId: unbookmarkTweet
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tweet_id
+          in: path
+          description: Tweet Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 64be0ad2e43d2464394feedb
+      responses:
+        default:
+          description: Unbookmark successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unbookmark successfully
+                  result:
+                    $ref: '#/components/schemas/UnTweetResponseBody'
+  /bookmarks/{bookmark_id}:
+    delete:
+      tags:
+        - bookmarks
+      summary: Unbookmark tweet by like_id
+      description: Unbookmark tweet by like_id
+      operationId: unbookmarkTweet
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: bookmark_id
+          in: path
+          description: Bookmark Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 64be0ad2e43d2464394feedb
+      responses:
+        default:
+          description: Unbookmark successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unlike successfully
+                  result:
+                    $ref: '#/components/schemas/UnTweetResponseBody'
+
+  /conversations/receivers/{receiver_id}:
+    get:
+      tags:
+        - conversations
+      summary: Get Conversations By receiverID
+      description: Get Conversations By receiverID
+      operationId: getConversationsByReceiverID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: receiver_id
+          in: path
+          description: Receiver Id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 64be0ad2e43d2464394feedb
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: Số lượng tweet trên 1 trang
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Get conversations successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get conversations successfully
+                  conversations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  result:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                        example: 1
+                      total_pages:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 10
+                      total_items:
+                        type: integer
+                        example: 1
+
+        '400':
+          description: Invalid status value
