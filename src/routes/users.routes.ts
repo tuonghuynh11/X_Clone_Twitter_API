@@ -207,6 +207,7 @@ usersRouter.get('/random', wrapRequestHandler(getRandomUserController))
  * Path: /followers
  * Method: GET
  * Header:{Authorization:Bearer <access_token>}
+ * Token
  * Body:
  * **/
 usersRouter.get(
